@@ -3,11 +3,19 @@
   "version": "1.0.0",
   "description": "View pr0gramm using the lcars design",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itssme/pr0cars.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "itssme",
   "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/itssme/pr0cars/issues"
+  },
+  "homepage": "https://github.com/itssme/pr0cars#readme",
   "dependencies": {
     "express": "^4.17.0",
     "morgan": "^1.9.1",

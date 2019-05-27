@@ -33,6 +33,22 @@ function load_next() {
 }
 
 function load_img(img_id) {
-    document.getElementById("img_view").src = "https://img.pr0gramm.com/" + img_id;
+    if (img_id.endsWith(".mp4")) {
+        let video_view = document.getElementById("video_view");
+        let video_source = document.getElementById("video_source");
+        video_view.pause();
+        video_source.setAttribute('src', "https://vid.pr0gramm.com/" + img_id);
+        video_view.load();
+        video_view.play();
+        document.getElementById("img_view").style.display = "none";
+        document.getElementById("video_view").style.display = "block";
+    } else {
+        document.getElementById("video_view").pause();
+        document.getElementById("img_view").src = "https://img.pr0gramm.com/" + img_id;
+        document.getElementById("video_view").style.display = "none";
+        document.getElementById("img_view").style.display = "block";
+        console.log(document.getElementById("img_view").style.display);
+    }
+
     console.log("https://img.pr0gramm.com/" + img_id);
 }
