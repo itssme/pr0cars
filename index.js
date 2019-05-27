@@ -31,29 +31,79 @@ http.listen(3000, function(){
 });
 
 io.on('connection', function(socket) {
-    console.log('a user connected');
+    console.log('a (schm)user connected');
     let items = [];
     let item_pos = 0;
 
-    https.get("https://pr0gramm.com/api/items/get", (resp) => {
-        let data = '';
+    function get_items() {
+        https.get("https://pr0gramm.com/api/items/get", (resp) => {
+            let data = '';
 
-        resp.on('data', (chunk) => {
-            data += chunk;
+            resp.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            resp.on('end', () => {
+                item_pos = 0;
+                items = JSON.parse(data).items;
+                socket.emit("image", items[item_pos].image);
+                console.log("got new items");
+            });
+
+        }).on("error", (err) => {
+            console.log("Error: " + err.message);
         });
+    }
+    get_items();
 
-        resp.on('end', () => {
-            console.log(JSON.parse(data).items[0].image);
-            items = JSON.parse(data).items;
-            socket.emit("image", items[item_pos].image);
+    function get_items_after_id(item_id) {
+        https.get("https://pr0gramm.com/api/items/get?older=" + item_id, (resp) => {
+            console.log("made req -> " + "https://pr0gramm.com/api/items/get?older=" + item_id);
+            let data = '';
+
+            resp.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            resp.on('end', () => {
+                item_pos = 0;
+                items = JSON.parse(data).items;
+                socket.emit("image", items[item_pos].image);
+                console.log("got new items");
+            });
+
+        }).on("error", (err) => {
+            console.log("Error: " + err.message);
         });
+    }
 
-    }).on("error", (err) => {
-        console.log("Error: " + err.message);
-    });
+    function get_item_info(item_id) {
+        https.get("https://pr0gramm.com/api/items/info?itemId=" + item_id, (resp) => {
+            let data = '';
+
+            resp.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            resp.on('end', () => {
+                socket.emit("info", data);
+                console.log(data);
+            });
+
+        }).on("error", (err) => {
+            console.log("Error: " + err.message);
+        });
+    }
 
     socket.on("next_image", function (msg) {
         item_pos += 1;
-        socket.emit("image", items[item_pos].image);
+        console.log("requested -> " + item_pos);
+        if (item_pos >= items.length) {
+            get_items_after_id(items[item_pos-1].id);
+        } else {
+            console.log("ok -> " + item_pos);
+            socket.emit("image", items[item_pos].image);
+            get_item_info(items[item_pos].id);
+        }
     })
 });

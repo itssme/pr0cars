@@ -10,6 +10,10 @@ function init() {
         loaded.push(msg);
         image_pos += 1;
     });
+    
+    socket.on('info', function (msg) {
+        JSON.parse(msg);
+    });
 }
 
 function load_perv() {
