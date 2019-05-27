@@ -1,0 +1,16 @@
+{
+  "name": "pr0cars",
+  "version": "1.0.0",
+  "description": "View pr0gramm using the lcars design",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "itssme",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "express": "^4.17.0",
+    "morgan": "^1.9.1",
+    "socket.io": "^2.2.0"
+  }
+}

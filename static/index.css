@@ -1,0 +1,15 @@
+@font-face {
+    font-family: lcars;
+    src: url(/resources/lcars.ttf);
+    font-weight: bold;
+}
+
+.lcars-text {
+    font-family: lcars;
+}
+
+.number {
+    width: 6ch;
+}
+
+input:focus {outline:0;}

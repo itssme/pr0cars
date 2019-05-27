@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lcars Pr0</title>
+    <style>
+
+        html, body { background: black }
+        p, h1, h2, h3 {
+            margin-top: 1em;
+        }
+
+        pre {
+            display: inline;
+            white-space: pre-line;
+            word-wrap: break-word;
+        }
+    </style>
+    <title>Lcars Pr0</title>
+    <link rel="stylesheet" href="/static/lcars.css">
+    <link rel="stylesheet" href="/static/index.css">
+    <script type="text/javascript" src="utils/utils.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+</head>
+<body onload="init()">
+<div class="lcars-app-container">
+
+    <!-- HEADER ==================================================== -->
+
+    <div id="header" class="lcars-row header">
+
+        <!-- ELBOW -->
+        <div class="lcars-elbow left-bottom lcars-tan-bg"></div>
+
+        <!-- BAR WITH TITLE -->
+        <div class="lcars-bar horizontal">
+            <div class="lcars-title right">LCARS</div>
+        </div>
+
+        <!-- ROUNDED EDGE DECORATED -->
+        <div class="lcars-bar horizontal right-end decorated"></div>
+    </div>
+
+    <!-- SIDE MENU ================================================= -->
+
+    <div id="left-menu" class="lcars-column start-space lcars-u-1">
+
+        <!-- FILLER -->
+        <div class="lcars-bar lcars-u-1"></div>
+    </div>
+
+    <!-- FOOTER ==================================================== -->
+
+    <div id="footer" class="lcars-row ">
+        <!-- ELBOW -->
+        <div class="lcars-elbow left-top lcars-tan-bg"></div>
+        <!-- BAR -->
+        <div class="lcars-bar horizontal both-divider bottom"></div>
+        <!-- ROUNDED EDGE -->
+        <div class="lcars-bar horizontal right-end left-divider bottom"></div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div id="container">
+        <!-- COLUMN LAYOUT -->
+        <div class=""> <!-- lcars-column lcars-u-8 -->
+            <br>
+            <div class="lcars-row fill">
+                <div class="lcars-bar horizontal left-end"></div>
+                <div class="lcars-text lcars-orange-peel-color" style="font-size: 25px; padding-left: 10px; padding-right: 10px">Download</div>
+                <div class="lcars-bar horizontal"></div>
+                <div class="lcars-bar horizontal right-end"></div>
+            </div>
+            <br>
+            <br>
+            <div class="lcars-row centered">
+                <div class="lcars-bracket left hollow"></div>
+                <div class="lcars-row full centered">
+                    <div class="lcars-column" style="padding-left: 5px; padding-right: 5px;">
+                        <div class="lcars-column">
+                            <img id="img_view" src="https://img.pr0gramm.com/2019/05/26/0b726099a63830b2.jpg" style="max-width: 40vw;">
+                            <br>
+                            <div class="lcars-row centered">
+                                <div class="lcars-column">
+                                    <input onclick="load_perv()" class="lcars-element button rounded lcars-text lcars-yellow-bg lcars-black-color lcars-yellow-border" style="font-size: 20px; width: 8em; height: 30px" type="button" value="PREVIOUS">
+                                </div>
+                                <div class="lcars-column">
+                                    <input onclick="load_next()" class="lcars-element button rounded lcars-text lcars-yellow-bg lcars-black-color lcars-yellow-border" style="font-size: 20px; width: 8em; height: 30px" type="button" value="NEXT">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lcars-column" style="padding-left: 5px; padding-right: 5px;">
+                        <div class="lcars-column">
+                            wasd
+                        </div>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+                <div class="lcars-bracket right hollow"></div>
+            </div>
+            <br>
+            <br>
+            <div id="terminal"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
