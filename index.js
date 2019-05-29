@@ -42,34 +42,39 @@ function login(_username, _password) {
 
     console.log(data);
 
-    const options = {
-        hostname: 'pr0gramm.com',
-        port: 443,
-        path: '/api/user/login/',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': data.length
+    const req = https.request(
+        {
+            hostname: 'pr0gramm.com',
+            port: 443,
+            path: '/api/user/login/',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Length': data.length
+            }
+        },
+        function(res) {
+            let str = "";
+
+            res.on("data", function(chunk) {
+                str += chunk;
+            });
+
+            res.on("end", function() {
+                console.log("got cookie -> " + res.headers["set-cookie"]);
+                const cookie = res.headers["set-cookie"][1].substring(
+                    0,
+                    res.headers["set-cookie"][1].indexOf(";")
+                );
+                console.log("cookie is -> " + cookie);
+                login_cookie = cookie;
+            });
         }
-    };
-
-    const req = https.request(options, (res) => {
-        console.log(`statusCode: ${res.statusCode}`);
-
-        res.on('data', (d) => {
-            console.log("cookie is -> " + d);
-            console.log("cookie is -> " + d.cookies);
-            login_cookie = d;
-        })
-    });
-
-    req.on('error', (error) => {
-        console.error(error)
-    });
-
+    );
     req.write(data);
-    req.end()
+    req.end();
 }
+
 
 let username = "";
 read({ prompt: 'Username: ', silent: true }, function(er, _username) {
@@ -130,41 +135,41 @@ io.on('connection', function(socket) {
 
     function get_item_info(item_id) {
         let data = querystring.stringify({
-            'itemId' : item_id
+            'itemId' : item_id,
+            'flags': 9
         });
 
-        const options = {
-            hostname: 'pr0gramm.com',
-            port: 443,
-            path: '/api/items/info',
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Length': data.length
-            }
+        const req = https.request(
+            {
+                hostname: 'pr0gramm.com',
+                port: 443,
+                path: '/api/items/info?itemId=' + item_id + '&flags=9',
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': data.length,
+                    Cookie: [login_cookie]
+                }
 
-        };
+            }, (res) => {
+                let data = '';
 
-        // "https://pr0gramm.com/api/items/info?itemId=" + item_id
-        const req = https.request(options, (res) => {
-            console.log(`statusCode: ${res.statusCode}`);
-            let data = '';
+                res.on('data', (chunk) => {
+                    data += chunk;
+                });
 
-            res.on('data', (chunk) => {
-                data += chunk;
+                res.on('end', () => {
+                    console.log(data);
+                });
             });
-
-            res.on('end', () => {
-                console.log(data);
-            });
-        });
 
         req.on('error', (error) => {
             console.error(error)
         });
 
         req.write(data);
-        req.end()
+        console.log(data);
+        req.end();
     }
 
     socket.on("next_image", function (msg) {
