@@ -5,6 +5,8 @@ let logger = require('morgan');
 let io = require('socket.io')(http);
 const querystring = require('querystring');
 const read = require('read');
+const fs = require('fs');
+const path = require('path');
 
 app.use(logger('dev'));
 
@@ -68,6 +70,13 @@ function login(_username, _password) {
                 );
                 console.log("cookie is -> " + cookie);
                 login_cookie = cookie;
+                fs.writeFile("./cookie.txt", login_cookie, function(err) {
+                    if(err) {
+                        return console.log(err);
+                    }
+
+                    console.log("The cookie was saved -> " + login_cookie);
+                });
             });
         }
     );
@@ -75,16 +84,27 @@ function login(_username, _password) {
     req.end();
 }
 
-
-let username = "";
-read({ prompt: 'Username: ', silent: true }, function(er, _username) {
-    console.log('Your username is: %s', _username);
-    username = _username;
-    read({ prompt: 'Password: ', silent: true }, function(er, password) {
-        console.log('Your password is: %s', password);
-        login(username, password);
+if (fs.existsSync("./cookie.txt")) {
+    let filePath = path.join(__dirname, "./cookie.txt");
+    fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data){
+        if (!err) {
+            console.log('read login cookie from file -> ' + data);
+            login_cookie = data;
+        } else {
+            console.log(err);
+        }
     });
-});
+} else {
+    let username = "";
+    read({prompt: 'Username: ', silent: true}, function (er, _username) {
+        console.log('Your username is: %s', _username);
+        username = _username;
+        read({prompt: 'Password: ', silent: true}, function (er, password) {
+            console.log('Your password is: %s', password);
+            login(username, password);
+        });
+    });
+}
 
 io.on('connection', function(socket) {
     console.log('a (schm)user connected');
