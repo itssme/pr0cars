@@ -192,11 +192,49 @@ io.on('connection', function(socket) {
         req.end();
     }
 
+    function vote(item_id, vote) { // vote can be 1 or -1
+        let data = querystring.stringify({
+            'id' : item_id,
+            'vote': vote,
+            '_nonce': JSON.parse(decodeURIComponent(login_cookie).substring(3)).id.substring(0, 16)
+        });
+
+        console.log(data);
+
+        const req = https.request(
+            {
+                hostname: 'pr0gramm.com',
+                port: 443,
+                path: '/api/items/vote',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': data.length,
+                    Cookie: [login_cookie]
+                }
+            },
+            function(res) {
+                let str = "";
+
+                res.on("data", function(chunk) {
+                    str += chunk;
+                });
+
+                res.on("end", function() {
+                    console.log("voted -> " + str);
+                });
+            }
+        );
+        req.write(data);
+        req.end();
+    }
+
     socket.on("next_image", function (msg) {
         item_pos += 1;
         console.log("requested -> " + item_pos);
         if (item_pos >= items.length) {
             get_items_after_id(items[item_pos-1].id);
+            get_item_info(items[item_pos].id);
         } else {
             console.log("ok -> " + item_pos);
             socket.emit("image", items[item_pos].image);
