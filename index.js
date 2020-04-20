@@ -192,7 +192,7 @@ io.on('connection', function(socket) {
         req.end();
     }
 
-    function vote(item_id, vote) { // vote can be 1 or -1
+    function vote(item_id, vote) { // vote can be 1, 0 or -1
         let data = querystring.stringify({
             'id' : item_id,
             'vote': vote,

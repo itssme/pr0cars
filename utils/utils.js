@@ -52,3 +52,7 @@ function load_img(img_id) {
 
     console.log("https://img.pr0gramm.com/" + img_id);
 }
+
+function vote(_vote) {
+    socket.emit("vote", JSON.stringify({"vote": _vote, "itemId": loaded[image_pos]}));
+}
